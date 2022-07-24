@@ -1,5 +1,5 @@
 # orekit-sgp4-xp
-This project integrates USSF binaries for SGP4 and SGP4-XP propagators into Orekit.  
+This project integrates USSF binaries for SGP4 and SGP4-XP propagators into Orekit.  The new SGP4-XP propagator is very, very accurate for high orbits.  See my recent conference [paper](https://amostech.com/TechnicalPapers/2021/Astrodynamics/Holincheck.pdf) for more information. 
 
 The binaries are available from the [space-track.org](https://space-track.org) website.  After you login, go to Help, select SGP4, and you should see a zip file you can download.  If you click it, read and agree to the license, the zip file will download.
 
@@ -29,13 +29,13 @@ If you want to use the JNI version, copy the compiled binaries to the other libr
 
 The JNI Binaries for Windows would need to be copied from Sgp4Prop/SampleCode/Java/jni/c_jni_export/lib/Win64.
 
-**Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out everytime a dll or so is loaded into memory.
+**Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out everytime a .dll or .so is loaded into memory.
  
 ##License File
 At runtime, the USSF code checks for the precense of the SGP4_Open_License.txt file.  With version 8.3, it seems to be happy with the file being in the same directory as the binaries.  However, you may need to create a copy of the file in the directory where you are running the code from.
 
 #Integrating with Orekit
-Each implementation (JNI or JNA) has a static method for `selectExtrapolator` that takes a `TLE` as an argument and returns a `TLEPropagator`.  You can all this method directly if you want to easily control when the USSF binaries are called.  If you want to seamlessly get the USSF version whenever an SGP4-XP tle is passed to the base `TLEPropagator` class, then feel free to replace the one in your version of Orekit with the one here.  Because the USSF binaries are currently the only way to use the new SGP4-XP propagator, pass all TLEs with the ephemeris type of 4 to the new classes.  Again use either JNI or JNA.  Theres no need to use both.
+Each implementation (JNI or JNA) has a static method for `selectExtrapolator` that takes a `TLE` as an argument and returns a `TLEPropagator`.  You can all this method directly if you want to easily control when the USSF binaries are called.  If you want to seamlessly get the USSF version whenever an SGP4-XP tle is passed to the base `TLEPropagator` class, then feel free to replace the one in your version of Orekit with the one here.  Because the USSF binaries are currently the only way to use the new SGP4-XP propagator, pass all TLEs with the ephemeris type of 4 to the new classes.  Again use either JNI or JNA.  Theres no need to use both.  You can copy these few lines of code into the existing `selectExtrapolator` method in `TLEPropagator` right above where it decides between `SGP4` and `SDP4`.  These binaries can replace both of those propagators as well, though the implements in Orekit are definitely accurate.
 
         /******************************************************************************************/
         /*  Insert prefered JNA or JNI implementation here, use for just SGP4-XP or all flavors   */
