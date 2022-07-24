@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/ussfsgp4/afspc.jar"/>
+	<classpathentry kind="lib" path="lib/ussfsgp4/jna-5.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/ussfsgp4/jna-platform-5.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/orekit/orekit-11.2.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-core-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-filtering-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-fitting-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-geometry-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-ode-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-optim-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hipparchus/hipparchus-stat-2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
