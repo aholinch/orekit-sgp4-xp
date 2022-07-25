@@ -32,45 +32,100 @@ public class PropagatorTest
 	{
 		OrekitDataSetup.initOrekitData();
 		
-		main1();
+		test1();
+		
+		test2();
+		
+		System.exit(0);
+		
 	}
 	
-
-	public static void main1() 
+	public static boolean isEqual(PVCoordinates pv1, PVCoordinates pv2, PVCoordinates pv3, double tol) throws Exception
+	{
+		Vector3D v1 = null;
+		Vector3D v2 = null;
+		
+		// compare positions
+		v1 = pv1.getPosition();
+		v2 = pv2.getPosition();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		v1 = pv1.getPosition();
+		v2 = pv3.getPosition();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		v1 = pv2.getPosition();
+		v2 = pv3.getPosition();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		
+		
+		// compare velocities
+		v1 = pv1.getVelocity();
+		v2 = pv2.getVelocity();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		v1 = pv1.getVelocity();
+		v2 = pv3.getVelocity();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		v1 = pv2.getVelocity();
+		v2 = pv3.getVelocity();
+		if(diff(v1,v2)>tol)
+		{
+			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
+		}
+		
+		return true;
+	}
+	
+	public static double diff(Vector3D v1, Vector3D v2)
+	{
+		double n1 = v1.getNorm();
+		double diff = v1.subtract(v2).getNorm();
+		diff = diff/n1;
+		
+		return diff;
+	}
+	
+	
+	/**
+	 * Ensure the original TLEPropagator and the two that use the USSF binaries give the same answer for a regular SGP4 TLE.
+	 */
+	public static void test1() 
 	{
 		try
 		{
-
-			
 			String line1 = null;
 			String line2 = null;
+
 			
-			line1 = "1 99999U          21008.00000000 +.00000000 +30976-1 +00000-0 4    00";
-			line2 = "2 99999 050.5192 353.2068 1658374 106.0367 124.4650 01.85517713    00";
-			//line1 = "1 25984U 99065E   22001.16913692  .00000296  00000-0  15764-3 0  9992";
-			//line2 = "2 25984  45.0387 286.1141 0002151  61.6197 298.4867 14.33180775153001";
+			//https://live.ariss.org/tle/
+			line1 = "1 25544U 98067A   22164.21264515  .00005702  00000-0  10791-3 0  9996";
+			line2 = "2 25544  51.6447 356.2727 0004326 230.6083 279.1425 15.49973985344560";
 			
 			TLE tle = new TLE(line1,line2);
 			
-			Frame teme = FramesFactory.getTEME();
-			Frame itrf = FramesFactory.getITRF(IERSConventions.IERS_2010, true);
-	        
-			BodyShape earth = new OneAxisEllipsoid(Constants.WGS84_EARTH_EQUATORIAL_RADIUS,
-					Constants.WGS84_EARTH_FLATTENING,
-					itrf);
-			
-			GeodeticPoint loc = null;
-			Vector3D pos = null;
+			System.out.println("\n\n\n");
+			System.out.println("Testing SGP4 with the following TLE\n");
+			System.out.println(line1);
+			System.out.println(line2);
+
 			AbsoluteDate ad = null;
-			PVCoordinates pv = null;
-			/*
-			for(int i=0; i<size; i++)
-			{
-				pos = toPV(cart).getPosition();
-				ad = toAD(cart.getEpoch());
-				loc = earth.transform(pos, frame, ad);
-			}
-			*/
+			PVCoordinates pv1 = null;
+			PVCoordinates pv2 = null;
+			PVCoordinates pv3 = null;
+			
 			
 			ad = tle.getDate();
 
@@ -79,17 +134,71 @@ public class PropagatorTest
 
 			TLEPropagator prop1 = TLEPropagator.selectExtrapolator(tle);
 			TLEPropagator prop2 = USSFJnaTLEPropagator.selectExtrapolator(tle);
+			
 			for(int i=0; i<100; i++)
 			{
-				pv = prop1.getPVCoordinates(ad);
-				System.out.println(pv);
-				pv = prop2.getPVCoordinates(ad);
-				System.out.println(pv);
-				pv = prop3.getPVCoordinates(ad);
-				System.out.println(pv);
-				pos = pv.getPosition();
-				loc = earth.transform(pos, teme, ad);
-				System.out.println(loc);
+				pv1 = prop1.getPVCoordinates(ad);
+				System.out.println(pv1);
+				pv2 = prop2.getPVCoordinates(ad);
+				System.out.println(pv2);
+				pv3 = prop3.getPVCoordinates(ad);
+				System.out.println(pv3);
+				
+				isEqual(pv1,pv2,pv3,1e-12);  // this is better than mm agreement in position
+				ad = ad.shiftedBy(300);
+			}
+		}
+		catch(Exception ex)
+		{
+			logger.log(Level.WARNING,"Error running propagators",ex);
+		}
+	}
+
+	/**
+	 * Ensure the TLEPropagator and the two that use the USSF binaries give the same answer for a TLE using SGP4-XP.
+	 */
+	public static void test2() 
+	{
+		try
+		{
+			String line1 = null;
+			String line2 = null;
+			
+			//https://github.com/aholinch/amos2021/tree/main/sgp4xp
+			line1 = "1 99999U          21008.00000000 +.00000000 +30976-1 +00000-0 4    00";
+			line2 = "2 99999 050.5192 353.2068 1658374 106.0367 124.4650 01.85517713    00";
+			
+			TLE tle = new TLE(line1,line2);
+			
+			System.out.println("\n\n\n");
+			System.out.println("Testing SGP4-XP with the following TLE\n");
+			System.out.println(line1);
+			System.out.println(line2);
+			
+			AbsoluteDate ad = null;
+			PVCoordinates pv1 = null;
+			PVCoordinates pv2 = null;
+			PVCoordinates pv3 = null;
+			
+			
+			ad = tle.getDate();
+
+			// when mixing and matching jni and jna, jni really wants to be initialized first
+			TLEPropagator prop3 = USSFJniTLEPropagator.selectExtrapolator(tle);
+
+			TLEPropagator prop1 = TLEPropagator.selectExtrapolator(tle);
+			TLEPropagator prop2 = USSFJnaTLEPropagator.selectExtrapolator(tle);
+			
+			for(int i=0; i<100; i++)
+			{
+				pv1 = prop1.getPVCoordinates(ad);
+				System.out.println(pv1);
+				pv2 = prop2.getPVCoordinates(ad);
+				System.out.println(pv2);
+				pv3 = prop3.getPVCoordinates(ad);
+				System.out.println(pv3);
+				
+				isEqual(pv1,pv2,pv3,1e-15);  // this is better than mm agreement in position
 				ad = ad.shiftedBy(300);
 			}
 		}
