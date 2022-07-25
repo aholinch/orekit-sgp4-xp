@@ -8,15 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.orekit.bodies.BodyShape;
-import org.orekit.bodies.GeodeticPoint;
-import org.orekit.bodies.OneAxisEllipsoid;
 
-import org.orekit.frames.Frame;
-import org.orekit.frames.FramesFactory;
 import org.orekit.time.AbsoluteDate;
-import org.orekit.utils.Constants;
-import org.orekit.utils.IERSConventions;
 import org.orekit.utils.PVCoordinates;
 
 /**
@@ -85,13 +78,19 @@ public class PropagatorTest
 		{
 			throw new Exception("Difference exceeds tolerance: " + v1 + ", " + v2);
 		}
-		
+
 		return true;
 	}
 	
-	public static double diff(Vector3D v1, Vector3D v2)
+	public static double diff(Vector3D v1, Vector3D v2) throws Exception
 	{
 		double n1 = v1.getNorm();
+		
+		if(n1 < 1000)
+		{
+			throw new Exception("Tiny magnitude not expected: " + v1 +", "+v2);
+		}
+		
 		double diff = v1.subtract(v2).getNorm();
 		diff = diff/n1;
 		

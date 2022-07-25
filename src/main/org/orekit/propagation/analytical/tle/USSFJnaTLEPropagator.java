@@ -21,7 +21,6 @@ import com.sun.jna.ptr.DoubleByReference;
 import afspc.astrostds.wrappers.JnaDllMain;
 import afspc.astrostds.wrappers.JnaSgp4Prop;
 import afspc.astrostds.wrappers.JnaTle;
-import afspc.astrostds.wrappers.JniDllMain;
 
 public class USSFJnaTLEPropagator extends TLEPropagator 
 {
