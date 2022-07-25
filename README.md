@@ -20,7 +20,7 @@ To run the code in this repository you need the following
 You need to download the data file from [here](https://gitlab.orekit.org/orekit/orekit-data/-/archive/master/orekit-data-master.zip).  Unzip the file, and remember the full path to the directory.  If you unzip the file and call it orekit-data and have it located in your home directory, Orekit should find it at runtime.  If not, specify and environment variable for orekit_data, or pass a startup parameter to java named orekit.data.
 
 ## Binaries from Sgp4Prop
-On linux, the shared object files must be available in a directory specified by the LD_LIBRARY_PATH directory.  From the directory where you unziped the Sgp4Prop zip file, you can copy the appropriate directory (32-bit or 64-bit) or just specify the path.  The relative path is Sgp4Prop/Lib/Linux64.
+On linux, the shared object files must be available in a directory specified by the LD_LIBRARY_PATH directory.  From the directory where you unzipped the Sgp4Prop zip file, you can copy the appropriate directory (32-bit or 64-bit) or just specify the path.  The relative path is Sgp4Prop/Lib/Linux64.
 
 On Windows, the directory with the DLLs needs to be specified in the PATH environment variable.  Sgp4Prop/Lib/Win64.
 
@@ -29,13 +29,15 @@ If you want to use the JNI version, copy the compiled binaries to the other libr
 
 The JNI Binaries for Windows would need to be copied from Sgp4Prop/SampleCode/Java/jni/c_jni_export/lib/Win64.
 
-**Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out everytime a .dll or .so is loaded into memory.
+**Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out every time a .dll or .so is loaded into memory.
  
 ## License File
-At runtime, the USSF code checks for the presence of the SGP4_Open_License.txt file.  With version 8.3, it seems to be happy with the file being in the same directory as the binaries.  However, you may need to create a copy of the file in the directory where you are running the code from.
+At runtime, the USSF code checks for the presence of the SGP4_Open_License.txt file.  With version 8.3, it seems to be happy with the file being in the same directory as the binaries.  However, you may need to create a copy of the file in the directory where you are running the code.
 
 # Running the test from the command line
-If you don't build the project in Eclipse, you can use the command line scripts to compile and run the test.  On linux run `buildit.sh` to compile.  To run the tests, edit `runit.sh` to set the `orekit_data` environment variable and the `LD_LIBRARY_PATH` environment variable.  Then execute `runit.sh`. 
+If you don't build the project in Eclipse, you can use the command line scripts to compile and run the test.  On linux run `buildit.sh` to compile.  To run the tests, edit `runit.sh` to set the `orekit_data` environment variable and the `LD_LIBRARY_PATH` environment variable.  Then execute `runit.sh`.
+
+For windows, make sure that you have a `javac` command on your path that is 1.8 or later.  Run `buildit.bat` to compile it.  Edit `runit.bat` to set `orekit_data` and add the Win64 library directory to your `PATH` environment variable.  Then execute `runit.bat`. 
 
 
 # Integrating with Orekit
