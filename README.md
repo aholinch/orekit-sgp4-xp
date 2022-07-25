@@ -32,7 +32,11 @@ The JNI Binaries for Windows would need to be copied from Sgp4Prop/SampleCode/Ja
 **Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out everytime a .dll or .so is loaded into memory.
  
 ## License File
-At runtime, the USSF code checks for the precense of the SGP4_Open_License.txt file.  With version 8.3, it seems to be happy with the file being in the same directory as the binaries.  However, you may need to create a copy of the file in the directory where you are running the code from.
+At runtime, the USSF code checks for the presence of the SGP4_Open_License.txt file.  With version 8.3, it seems to be happy with the file being in the same directory as the binaries.  However, you may need to create a copy of the file in the directory where you are running the code from.
+
+# Running the test from the command line
+If you don't build the project in Eclipse, you can use the command line scripts to compile and run the test.  On linux run `buildit.sh` to compile.  To run the tests, edit `runit.sh` to set the `orekit_data` environment variable and the `LD_LIBRARY_PATH` environment variable.  Then execute `runit.sh`. 
+
 
 # Integrating with Orekit
 Each implementation (JNI or JNA) has a static method for `selectExtrapolator` that takes a `TLE` as an argument and returns a `TLEPropagator`.  You can all this method directly if you want to easily control when the USSF binaries are called.  If you want to seamlessly get the USSF version whenever an SGP4-XP tle is passed to the base `TLEPropagator` class, then feel free to replace the one in your version of Orekit with the one here.  Because the USSF binaries are currently the only way to use the new SGP4-XP propagator, pass all TLEs with the ephemeris type of 4 to the new classes.  Again use either JNI or JNA.  Theres no need to use both.  You can copy these few lines of code into the existing `selectExtrapolator` method in `TLEPropagator` right above where it decides between `SGP4` and `SDP4`.  These binaries can replace both of those propagators as well, though the implements in Orekit are definitely accurate.
