@@ -3,7 +3,7 @@ This project integrates USSF binaries for SGP4 and SGP4-XP propagators into Orek
 
 The binaries are available from the [space-track.org](https://space-track.org) website.  After you login, go to Help, select SGP4, and you should see a zip file you can download.  If you click it, read and agree to the license, the zip file will download.
 
-This repository was built and tested using v8.3 of the Spg4Prop zip file.  The file downloaded from space-track.org contains documentation, sample code, wrappers, and binaries.
+This repository was built and tested using v8.3 of the Spg4Prop zip file.  The file downloaded from space-track.org contains documentation, sample code, wrappers, and binaries.  The JNA wrappers and utilities for v9.0 have been included in a separate jar if you want to try SGP4-XP on MacOS.
 
 To call binaries from Java, you can use JNA or JNI.  I've done a sample implementation of each following the examples provided by USSF.
 
@@ -24,10 +24,13 @@ On linux, the shared object files must be available in a directory specified by 
 
 On Windows, the directory with the DLLs needs to be specified in the PATH environment variable.  Sgp4Prop/Lib/Win64.
 
+The JNA binaries for MacOS have been tested with v9.0.  See [odutils](https://github.com/aholinch/odutils/) for some more information on getting MacOS support to work.
+
 ## JNI Binaries
 If you want to use the JNI version, copy the compiled binaries to the other library folder you just setup.  The binaries for linux are located Sgp4Prop/SampleCode/Java/jni/c_jni_export/lib/Linux64.
 
 The JNI Binaries for Windows would need to be copied from Sgp4Prop/SampleCode/Java/jni/c_jni_export/lib/Win64.
+
 
 **Note:** the JNI binaries in v8.3 for linux seem to have been compiled with a debug statement left uncommented that prints a message to standard out every time a .dll or .so is loaded into memory.
  
