@@ -7,7 +7,7 @@ This repository was built and tested using v8.3 of the Spg4Prop zip file.  The f
 
 To call binaries from Java, you can use JNA or JNI.  I've done a sample implementation of each following the examples provided by USSF.
 
-This repository is setup as an eclipse project that has all of the dependencies you need to compile the `TLEPropagator` instances for Orekit.  We have one class that uses JNA, `USSFJnaTLEPropagator`, and one that uses JNI, `USSFJnaTLEPropagator`.
+This repository is setup as an eclipse project that has all of the dependencies you need to compile the `TLEPropagator` instances for Orekit.  We have one class that uses JNA, `USSFJnaTLEPropagator`, and one that uses JNI, `USSFJniTLEPropagator`.
 
 # Running the Code
 To run the code in this repository you need the following
